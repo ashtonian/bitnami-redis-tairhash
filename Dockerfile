@@ -1,4 +1,4 @@
-FROM alpine AS builder
+FROM debian:bullseye-slim AS builder
 
 ENV TAIRHASH_URL https://github.com/alibaba/TairHash.git
 # https://github.com/alibaba/TairHash/commit/209e5772d6bdc9e2597bc7192a8241f1ec65a10d
@@ -18,7 +18,7 @@ RUN set -ex; \
     rm -rf /var/lib/apt/lists/*; \
     git clone "$TAIRHASH_URL"; \
     cd TairHash; \
-    git checekout "$GIT_HASH"; \
+    git checkout "$GIT_HASH"; \
     mkdir -p build; \
     cd build; \
     cmake ..; \
@@ -27,6 +27,7 @@ RUN set -ex; \
     cp lib/tairhash_module.so /usr/local/lib/;
 
 FROM bitnami/redis:7.0.2-debian-11-r1
+RUN echo "loadmodule /usr/lib/redis/modules/tairhash_module.so"  >> /opt/bitnami/redis/etc/redis.conf
 
 WORKDIR /data
 
