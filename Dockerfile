@@ -29,6 +29,4 @@ RUN set -ex; \
 FROM bitnami/redis:7.0.2-debian-11-r1
 RUN echo "loadmodule /usr/lib/redis/modules/tairhash_module.so"  >> /opt/bitnami/redis/etc/redis.conf
 
-WORKDIR /data
-
 COPY --from=builder /usr/local/lib/tairhash_module.so /usr/lib/redis/modules/
